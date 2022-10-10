@@ -19,6 +19,11 @@ class UserSerializer(serializers.ModelSerializer):
         updated_user.save()
         return updated_user
 
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'name', 'last_name')
+
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -26,7 +31,7 @@ class UserListSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance['id'],
+            'name': instance['name'],
             'username': instance['username'],
             'email': instance['email'],
-            'password': instance['password']
         }
