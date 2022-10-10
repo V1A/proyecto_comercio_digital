@@ -11,11 +11,12 @@ class MeasureUnitViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.get_serializer().Meta.model.objects.filter(state=True)
 
-class MeasureUnitListAPIView(GeneralListApiView):
-    serializer_class = MeasureUnitSerializer
-
-class IndicadorListAPIView(GeneralListApiView):
+class IndicatorViewSet(viewsets.ModelViewSet):
     serializer_class = IndicatorSerializer
+    parser_classes = (JSONParser, MultiPartParser, )
+    
+    def get_queryset(self):
+        return self.get_serializer().Meta.model.objects.filter(state=True)
 
 class CategoryProductListAPIView(GeneralListApiView):
     serializer_class = CategoryProductSerializer
