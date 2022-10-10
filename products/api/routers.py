@@ -7,6 +7,6 @@ router = DefaultRouter()
 router.register(r'products', ProductViewSet, basename = 'products')
 router.register(r'measure-unit', MeasureUnitViewSet, basename = 'measure_unit')
 router.register(r'indicators', IndicatorViewSet, basename = 'indicators')
-# router.register(r'category-products',CategoryProductViewSet,basename = 'category_products')
+router.register(r'category-products', CategoryProductViewSet,basename = 'category_products')
 
 urlpatterns = router.urls

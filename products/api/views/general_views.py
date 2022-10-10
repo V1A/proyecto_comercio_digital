@@ -18,5 +18,9 @@ class IndicatorViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.get_serializer().Meta.model.objects.filter(state=True)
 
-class CategoryProductListAPIView(GeneralListApiView):
+class CategoryProductViewSet(viewsets.ModelViewSet):
     serializer_class = CategoryProductSerializer
+    parser_classes = (JSONParser, MultiPartParser, )
+    
+    def get_queryset(self):
+        return self.get_serializer().Meta.model.objects.filter(state=True)
