@@ -1,11 +1,17 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.decorators import action
+
 from users.models import User
-from users.api.serializers import UserSerializer, UserListSerializer, UpdateUserSerializer
+from users.api.serializers import (
+  UserSerializer,
+  UserListSerializer,
+  UpdateUserSerializer,
+  PasswordSerializer
+)
 
 
 class UserViewSet(viewsets.GenericViewSet):
@@ -58,7 +64,7 @@ class UserViewSet(viewsets.GenericViewSet):
             'message': 'Hay errores en la actualización',
             'errors': user_serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
-        
+
     def destroy(self, request, pk=None):
         user_destroy = self.model.objects.filter(id=pk).update(is_active=False)
         if user_destroy == 1:
@@ -68,3 +74,18 @@ class UserViewSet(viewsets.GenericViewSet):
         return Response({
             'message': 'No existe el usuario que desea eliminar'
         }, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'])
+    def set_password(self, request, pk=None):
+        user = self.get_object(pk)
+        password_serializer = PasswordSerializer(data=request.data)
+        if password_serializer.is_valid():
+            user.set_password(password_serializer.validated_data['password'])
+            user.save()
+            return Response({
+                'message': 'Contraseña actualizada correctamente'
+            })
+        return Response({
+            'message': 'Hay errores en la información enviada',
+            'errors': password_serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)

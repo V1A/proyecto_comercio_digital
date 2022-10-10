@@ -35,3 +35,13 @@ class UserListSerializer(serializers.ModelSerializer):
             'username': instance['username'],
             'email': instance['email'],
         }
+class PasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=128, min_length=6, write_only=True)
+    password_confirmation = serializers.CharField(max_length=128, min_length=6, write_only=True)
+
+    def validate(self, data):
+        if data['password'] != data['password_confirmation']:
+            raise serializers.ValidationError(
+                {'password':'Debe ingresar ambas contraseñas iguales'}
+            )
+        return data
